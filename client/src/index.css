@@ -132,3 +132,6 @@ select:focus {
 .expense-item:last-child {
   border-bottom: none;
 }
+.btn-icon { background: transparent; padding: 0.5rem; border-radius: 0.5rem; display: flex; align-items: center; justify-content: center; color: var(--text-secondary); border: none; cursor: pointer; }
+.btn-icon:hover { background: var(--border-color); color: var(--text-primary); }
+.btn-secondary { background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-primary); padding: 0.5rem 1rem; border-radius: 0.5rem; font-weight: 500; cursor: pointer; }
