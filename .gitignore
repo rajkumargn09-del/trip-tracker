@@ -1,0 +1,15 @@
+node_modules/
+client/node_modules/
+server/node_modules/
+dist/
+client/dist/
+.DS_Store
+*.log
+expenses.db
+server/expenses.db
+.env
+.venv/
+env/
+venv/
+bin/
+obj/
