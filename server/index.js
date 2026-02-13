@@ -67,6 +67,18 @@ app.put('/api/expenses/:id', (req, res) => {
     });
 });
 
+// Delete an expense
+app.delete('/api/expenses/:id', (req, res) => {
+    const { id } = req.params;
+    db.run('DELETE FROM expenses WHERE id = ?', id, function (err) {
+        if (err) {
+            res.status(500).json({ error: err.message });
+            return;
+        }
+        res.json({ deleted: this.changes });
+    });
+});
+
 // Export all expenses as CSV
 app.get('/api/export', (req, res) => {
     db.all('SELECT * FROM expenses ORDER BY date DESC, time DESC', [], (err, rows) => {

@@ -4,19 +4,19 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   PieChart, Pie, Cell
 } from 'recharts';
-import { PlusCircle, Wallet, LayoutDashboard, History, User, Download, Edit2, Check, X } from 'lucide-react';
+import { PlusCircle, Wallet, LayoutDashboard, History, User, Download, Edit2, Trash2, Check, X } from 'lucide-react';
 import './index.css';
 
 const API_URL = '/api';
-const COLORS = ['#6366f1', '#a855f7', '#ec4899', '#f59e0b', '#10b981'];
+const COLORS = ['#4f46e5', '#7c3aed', '#ec4899', '#f59e0b', '#10b981'];
 
 const CATEGORIES = {
-  'Food': ['lunch', 'breakfast', 'dinner', 'snacks', 'others'],
-  'Transport': ['fuel', 'parking', 'Toll Charge', 'driver', 'others'],
-  'Accommodation': ['hotel', 'waiter', 'others'],
-  'Temple': ['Tickets', 'Prasadam', 'Pooja', 'donation', 'others'],
-  'Entertainment': ['others'],
-  'Others': ['others']
+  'Food': ['Lunch', 'Breakfast', 'Dinner', 'Snacks', 'Others'],
+  'Transport': ['Fuel', 'Parking', 'Toll Charge', 'Driver', 'Others'],
+  'Accommodation': ['Hotel', 'Waiter', 'Others'],
+  'Temple': ['Tickets', 'Prasadam', 'Pooja', 'Donation', 'Others'],
+  'Entertainment': ['Others'],
+  'Others': ['Others']
 };
 
 const SPENT_BY = ['Rajkumar', 'Ramesh', 'Bhavani', 'Uday', 'Shiva', 'Vishal', 'Others'];
@@ -30,7 +30,7 @@ function App() {
   const getInitialForm = () => ({
     amount: '',
     category: 'Food',
-    subCategory: 'lunch',
+    subCategory: 'Lunch', // Updated to match CATEGORIES
     purpose: '',
     spentBy: 'Rajkumar',
     date: new Date().toISOString().split('T')[0],
@@ -78,6 +78,17 @@ function App() {
       fetchData();
     } catch (err) {
       console.error('Error saving expense', err);
+    }
+  };
+
+  const handleDelete = async (id) => {
+    if (window.confirm('Are you sure you want to delete this transaction?')) {
+      try {
+        await axios.delete(`${API_URL}/expenses/${id}`);
+        fetchData();
+      } catch (err) {
+        console.error('Error deleting expense', err);
+      }
     }
   };
 
@@ -143,18 +154,24 @@ function App() {
           </div>
           <form onSubmit={handleSubmit} className="grid" style={{ gap: '1rem' }}>
             <div className="grid grid-cols-2" style={{ gap: '1rem' }}>
-              <input
-                type="date"
-                value={formData.date}
-                onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                required
-              />
-              <input
-                type="time"
-                value={formData.time}
-                onChange={(e) => setFormData({ ...formData, time: e.target.value })}
-                required
-              />
+              <div>
+                <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Date</label>
+                <input
+                  type="date"
+                  value={formData.date}
+                  onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+                  required
+                />
+              </div>
+              <div>
+                <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Time</label>
+                <input
+                  type="time"
+                  value={formData.time}
+                  onChange={(e) => setFormData({ ...formData, time: e.target.value })}
+                  required
+                />
+              </div>
             </div>
             <input
               type="number"
@@ -223,7 +240,7 @@ function App() {
                   ))}
                 </Pie>
                 <Tooltip
-                  contentStyle={{ backgroundColor: '#1e1e26', border: '1px solid var(--border-color)', borderRadius: '8px' }}
+                  contentStyle={{ backgroundColor: '#ffffff', border: '1px solid var(--border-color)', borderRadius: '8px' }}
                 />
               </PieChart>
             </ResponsiveContainer>
@@ -247,12 +264,15 @@ function App() {
                 </div>
                 <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>{exp.purpose || 'No description'}</div>
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                <div style={{ fontWeight: 700, color: 'var(--accent-primary)', fontSize: '1.2rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <div style={{ fontWeight: 700, color: 'var(--accent-primary)', fontSize: '1.2rem', marginRight: '1rem' }}>
                   ₹{exp.amount.toLocaleString()}
                 </div>
-                <button onClick={() => startEdit(exp)} className="btn-icon">
+                <button onClick={() => startEdit(exp)} className="btn-icon" title="Edit">
                   <Edit2 size={16} />
+                </button>
+                <button onClick={() => handleDelete(exp.id)} className="btn-icon delete" title="Delete">
+                  <Trash2 size={16} />
                 </button>
               </div>
             </div>

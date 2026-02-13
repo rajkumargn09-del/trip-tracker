@@ -1,13 +1,15 @@
 :root {
-  --bg-color: #0d0d12;
-  --card-bg: rgba(255, 255, 255, 0.05);
-  --accent-primary: #6366f1;
-  --accent-secondary: #a855f7;
-  --text-primary: #f8fafc;
-  --text-secondary: #94a3b8;
-  --border-color: rgba(255, 255, 255, 0.1);
-  --success: #22c55e;
-  --glass-blur: blur(12px);
+  --bg-color: #f8fafc;
+  --card-bg: #ffffff;
+  --accent-primary: #4f46e5;
+  --accent-secondary: #7c3aed;
+  --text-primary: #0f172a;
+  --text-secondary: #64748b;
+  --border-color: #e2e8f0;
+  --success: #10b981;
+  --danger: #ef4444;
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
 }
 
 body {
@@ -26,17 +28,16 @@ body {
 
 .glass-card {
   background: var(--card-bg);
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
   border: 1px solid var(--border-color);
   border-radius: 1rem;
   padding: 1.5rem;
+  box-shadow: var(--shadow-sm);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .glass-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+  box-shadow: var(--shadow-md);
 }
 
 .grid {
@@ -63,6 +64,7 @@ h2,
 h3 {
   margin: 0;
   font-weight: 700;
+  color: var(--text-primary);
 }
 
 .title-gradient {
@@ -89,13 +91,19 @@ button:hover {
 
 input,
 select {
-  background: rgba(255, 255, 255, 0.03);
+  background: #ffffff;
   border: 1px solid var(--border-color);
   padding: 0.75rem;
   border-radius: 0.5rem;
-  color: white;
+  color: var(--text-primary);
   width: 100%;
   box-sizing: border-box;
+  font-size: 1rem;
+}
+
+select option {
+  background: #ffffff;
+  color: var(--text-primary);
 }
 
 input:focus,
@@ -112,6 +120,7 @@ select:focus {
   font-size: 2rem;
   font-weight: 800;
   margin: 0.5rem 0;
+  color: var(--text-primary);
 }
 
 .summary-label {
@@ -132,6 +141,38 @@ select:focus {
 .expense-item:last-child {
   border-bottom: none;
 }
-.btn-icon { background: transparent; padding: 0.5rem; border-radius: 0.5rem; display: flex; align-items: center; justify-content: center; color: var(--text-secondary); border: none; cursor: pointer; }
-.btn-icon:hover { background: var(--border-color); color: var(--text-primary); }
-.btn-secondary { background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-primary); padding: 0.5rem 1rem; border-radius: 0.5rem; font-weight: 500; cursor: pointer; }
+
+.btn-icon {
+  background: transparent;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+  border: none;
+  cursor: pointer;
+}
+
+.btn-icon:hover {
+  background: var(--bg-color);
+  color: var(--accent-primary);
+}
+
+.btn-icon.delete:hover {
+  color: var(--danger);
+}
+
+.btn-secondary {
+  background: #ffffff;
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.btn-secondary:hover {
+  background: var(--bg-color);
+}
