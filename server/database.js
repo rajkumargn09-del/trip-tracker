@@ -16,9 +16,11 @@ db.serialize(() => {
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       amount REAL NOT NULL,
       category TEXT NOT NULL,
+      subCategory TEXT,
       purpose TEXT,
       spentBy TEXT NOT NULL,
-      date TEXT DEFAULT CURRENT_TIMESTAMP
+      date TEXT DEFAULT (date('now')),
+      time TEXT DEFAULT (time('now'))
     )
   `);
 });

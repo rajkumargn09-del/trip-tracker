@@ -28,14 +28,15 @@ app.get('/api/expenses', (req, res) => {
 
 // Add new expense
 app.post('/api/expenses', (req, res) => {
-    const { amount, category, purpose, spentBy } = req.body;
+    const { amount, category, subCategory, purpose, spentBy, date, time } = req.body;
     if (!amount || !category || !spentBy) {
         res.status(400).json({ error: 'Missing required fields' });
         return;
     }
 
-    const sql = 'INSERT INTO expenses (amount, category, purpose, spentBy) VALUES (?, ?, ?, ?)';
-    const params = [amount, category, purpose, spentBy];
+    const sql = `INSERT INTO expenses (amount, category, subCategory, purpose, spentBy, date, time) 
+                 VALUES (?, ?, ?, ?, ?, COALESCE(?, date('now')), COALESCE(?, time('now')))`;
+    const params = [amount, category, subCategory, purpose, spentBy, date, time];
 
     db.run(sql, params, function (err) {
         if (err) {
@@ -43,6 +44,45 @@ app.post('/api/expenses', (req, res) => {
             return;
         }
         res.json({ id: this.lastID });
+    });
+});
+
+// Update an expense
+app.put('/api/expenses/:id', (req, res) => {
+    const { id } = req.params;
+    const { amount, category, subCategory, purpose, spentBy, date, time } = req.body;
+
+    const sql = `UPDATE expenses SET 
+                 amount = ?, category = ?, subCategory = ?, 
+                 purpose = ?, spentBy = ?, date = ?, time = ? 
+                 WHERE id = ?`;
+    const params = [amount, category, subCategory, purpose, spentBy, date, time, id];
+
+    db.run(sql, params, function (err) {
+        if (err) {
+            res.status(500).json({ error: err.message });
+            return;
+        }
+        res.json({ updated: this.changes });
+    });
+});
+
+// Export all expenses as CSV
+app.get('/api/export', (req, res) => {
+    db.all('SELECT * FROM expenses ORDER BY date DESC, time DESC', [], (err, rows) => {
+        if (err) {
+            res.status(500).json({ error: err.message });
+            return;
+        }
+
+        const headers = 'ID,Date,Time,Category,Sub-Category,Amount,Spent By,Purpose\n';
+        const csv = rows.map(r =>
+            `${r.id},"${r.date}","${r.time}","${r.category}","${r.subCategory || ''}",${r.amount},"${r.spentBy}","${r.purpose || ''}"`
+        ).join('\n');
+
+        res.setHeader('Content-Type', 'text/csv');
+        res.setHeader('Content-Disposition', 'attachment; filename=trip_expenses.csv');
+        res.send(headers + csv);
     });
 });
 
