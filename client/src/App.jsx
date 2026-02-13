@@ -7,7 +7,7 @@ import {
 import { PlusCircle, Wallet, LayoutDashboard, History, User } from 'lucide-react';
 import './index.css';
 
-const API_URL = 'http://localhost:5000/api';
+const API_URL = '/api';
 const COLORS = ['#6366f1', '#a855f7', '#ec4899', '#f59e0b', '#10b981'];
 
 function App() {
